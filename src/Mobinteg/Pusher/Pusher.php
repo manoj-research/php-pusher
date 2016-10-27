@@ -15,15 +15,23 @@ class Pusher {
     $this->options = $options;
   }
 
+  /**
+   * @param Device[] $devices
+   * @param Payload $payload
+   * @return array
+   */
   public function send ( $devices, Payload $payload ) {
+    $androidDevices = byPlatform( $devices, "android" );
+    $iosDevices = byPlatform( $devices, "ios" );
+
     return [
-      "android" => $this->sendAndroid( byPlatform( $devices, "android" ), $payload ),
-      "ios" => $this->sendIos( byPlatform( $devices, "ios" ), $payload ),
+      "android" => $androidDevices ? $this->sendAndroid($androidDevices, $payload) : null,
+      "ios" => $iosDevices ? $this->sendIos($iosDevices, $payload) : null,
     ];
   }
 
   /**
-   * @param $tokens string[]
+   * @param string[] $tokens
    * @param Payload $payload
    */
   public function sendIos ( $tokens, Payload $payload ) {
@@ -51,9 +59,10 @@ class Pusher {
    * @return \PHP_GCM\MulticastResult
    */
   public function sendAndroid ( $tokens, Payload $payload ) {
+
     $connection = $this->getGcmConnection();
 
-    $message = new Message( $payload[ "collapseKey" ], [
+    $message = new Message( "collapse", [
       "title" => $payload->title,
       "message" => $payload->body,
       "type" => $payload->type,
@@ -61,13 +70,13 @@ class Pusher {
       "badge" => $payload->badge,
     ] );
 
-    return $connection->sendMulti( $message, $tokens, 10 );
+    return $connection->send( $message, $tokens[0], 10 );
   }
 
 
   private function getGcmConnection () {
     if ( !$this->gcmConnection ) {
-      $this->gcmConnection = new Sender( $this->options->gcmKey );
+      $this->gcmConnection = new Client( $this->options->gcmKey );
     }
 
     return $this->gcmConnection;
@@ -86,10 +95,10 @@ class Pusher {
 
 function byPlatform ( $devices, $platform ) {
   $platformDevices = array_values( array_filter( $devices, function ( $device ) use ( $platform ) {
-    return $device[ "platform" ] === $platform;
+    return $device->platform === $platform;
   } ) );
 
   return array_map( function ( $device ) {
-    return $device[ "token" ];
+    return $device->token;
   }, $platformDevices );
 }
