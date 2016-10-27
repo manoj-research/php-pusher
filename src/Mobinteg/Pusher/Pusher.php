@@ -86,55 +86,6 @@ class Pusher {
   }
 }
 
-class Options {
-  public $gcmKey = null;
-  public $apnsCertificatePath = null;
-  public $apnsPassword = null;
-
-  /**
-   * Options constructor.
-   * @param $gcmKey string
-   * @param $apnsCertificatePath string
-   * @param null $apnsPassword string
-   * @param int $apnsProduction int
-   */
-  public function __construct ( $gcmKey, $apnsCertificatePath, $apnsPassword = null, $apnsProduction = 0 ) {
-    $this->gcmKey = $gcmKey;
-    $this->apnsCertificatePath = $apnsCertificatePath;
-    $this->apnsPassword = $apnsPassword;
-    $this->apnsProduction = $apnsProduction;
-  }
-}
-
-class Payload {
-
-  /**
-   * @param $title string
-   * @param null $body string
-   * @param null $type string
-   * @param null $data array
-   * @param null $badge int
-   */
-  public function __construct ( $title, $body = null, $type = null, $data = null, $badge = null ) {
-    $this->title = $title;
-    $this->body = $body;
-    $this->type = $type;
-    $this->data = $data;
-    $this->badge = $badge;
-  }
-}
-
-class Device {
-  /**
-   * @param $token string
-   * @param $platform string
-   */
-  public function __construct ( $token, $platform ) {
-    $this->token = $token;
-    $this->platform = $platform;
-  }
-}
-
 function byPlatform ( $devices, $platform ) {
   $platformDevices = array_values( array_filter( $devices, function ( $device ) use ( $platform ) {
     return $device[ "platform" ] === $platform;
