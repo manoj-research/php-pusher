@@ -1,6 +1,6 @@
 <?php
 
-namespace Mobinteg;
+namespace Mobinteg\Pusher;
 
 
 class Options {

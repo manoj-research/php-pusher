@@ -1,8 +1,6 @@
 <?php
 
-namespace Mobinteg;
-
-require_once '../../vendor/autoload.php';
+namespace Mobinteg\Pusher;
 
 use PHP_GCM\Message;
 use PHP_GCM\Sender;
