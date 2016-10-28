@@ -13,12 +13,14 @@ class Options {
    * @param $gcmKey string
    * @param $apnsCertificatePath string
    * @param null $apnsPassword string
-   * @param int $apnsProduction int
+   * @param int $apnsProduction 0
+   * @param bool $oldGcmMode false
    */
-  public function __construct ( $gcmKey, $apnsCertificatePath, $apnsPassword = null, $apnsProduction = 0 ) {
+  public function __construct ( $gcmKey, $apnsCertificatePath, $apnsPassword = null, $apnsProduction = 0, $oldGcmMode = false ) {
     $this->gcmKey = $gcmKey;
     $this->apnsCertificatePath = $apnsCertificatePath;
     $this->apnsPassword = $apnsPassword;
     $this->apnsProduction = $apnsProduction;
+    $this->oldGcmMode = $oldGcmMode;
   }
 }
