@@ -141,7 +141,15 @@ class Pusher {
 
   private function getApnsConnection () {
     if ( !$this->apnsConnection ) {
-      $connection = new \ApnsPHP_Push( $this->options->apnsProduction, $this->options->apnsCertificatePath );
+      $connection = new \ApnsPHP_Push(
+        $this->options->apnsProduction ? \ApnsPHP_Abstract::ENVIRONMENT_PRODUCTION : \ApnsPHP_Abstract::ENVIRONMENT_SANDBOX,
+        $this->options->apnsCertificatePath
+      );
+      if ($this->options->apnsPassword) {
+        $connection->setProviderCertificatePassphrase($this->options->apnsPassword);
+      }
+      $logger = new ApnsLogger();
+      $connection->setLogger( $logger );
       $connection->connect();
       $this->apnsConnection = $connection;
     }
@@ -158,4 +166,9 @@ function byPlatform ( $devices, $platform ) {
   return array_map( function ( $device ) {
     return $device->token;
   }, $platformDevices );
+}
+
+class ApnsLogger implements \ApnsPHP_Log_Interface {
+  public function log($msg) {
+  }
 }
