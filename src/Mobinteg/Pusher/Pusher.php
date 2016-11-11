@@ -42,10 +42,18 @@ class Pusher {
     foreach ( $tokens as $token ) {
       $message->addRecipient( $token );
     }
-    $message->setBadge( $payload->badge );
-    $message->setText( $payload->title );
-    $message->setSound( $payload->sound );
-    $message->setExpiry( $payload->expiry );
+    if (isset($payload->title)) {
+      $message->setText( $payload->title );
+    }
+    if (isset($payload->badge)) {
+      $message->setBadge( $payload->badge );
+    }
+    if (isset($payload->sound)) {
+      $message->setSound( $payload->sound );
+    }
+    if (isset($payload->expiry)) {
+      $message->setExpiry( $payload->expiry );
+    }
     if ( isset( $payload->type ) ) {
       $message->setCustomProperty( "type", $payload->type );
     }
