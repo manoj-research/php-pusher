@@ -61,6 +61,7 @@ class Pusher {
     if ( isset( $payload->data ) ) {
       $message->setCustomProperty( "data", $payload->data );
     }
+    $message->setContentAvailable(true);
     $connection->add( $message );
 
     return $connection->send();
