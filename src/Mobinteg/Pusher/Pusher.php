@@ -39,6 +39,7 @@ class Pusher {
   public function sendIos ( $tokens, Payload $payload ) {
     $connection = $this->getApnsConnection();
     $message = new \ApnsPHP_Message();
+
     foreach ( $tokens as $token ) {
       $message->addRecipient( $token );
     }
@@ -46,7 +47,7 @@ class Pusher {
       $message->setText( $payload->title );
     }
     if (isset($payload->badge)) {
-      $message->setBadge( $payload->badge );
+      $message->setBadge( (int)$payload->badge );
     }
     if (isset($payload->sound)) {
       $message->setSound( $payload->sound );
